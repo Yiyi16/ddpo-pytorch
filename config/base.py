@@ -6,9 +6,11 @@ def get_config():
 
     ###### General ######
     # run name for wandb logging and checkpoint saving -- if not provided, will be auto-generated based on the datetime.
-    config.run_name = ""
+    config.run_name = "ddpo-seed1"
+    config.entity = "diffusion_cornell"
+    config.project = "full_aesthetic"
     # random seed for reproducibility.
-    config.seed = 42
+    config.seed = 1
     # top-level logging directory for checkpoint saving.
     config.logdir = "logs"
     # number of epochs to train for. each epoch is one round of sampling from the model followed by training on those
@@ -25,7 +27,7 @@ def get_config():
     # resume training from a checkpoint. either an exact checkpoint directory (e.g. checkpoint_50), or a directory
     # containing checkpoints, in which case the latest one will be used. `config.use_lora` must be set to the same value
     # as the run that generated the saved checkpoint.
-    config.resume_from = ""
+    config.resume_from = "/home/yiyi/ddpo-pytorch/logs/ddpo-largebz_2024.02.11_06.13.29/checkpoints/checkpoint_49"
     # whether or not to use LoRA. LoRA reduces memory usage significantly by injecting small weight matrices into the
     # attention layers of the UNet. with LoRA, fp16, and a batch size of 1, finetuning Stable Diffusion should take
     # about 10GB of GPU memory. beware that if LoRA is disabled, training will take a lot of memory and saved checkpoint
@@ -61,7 +63,7 @@ def get_config():
     # whether to use the 8bit Adam optimizer from bitsandbytes.
     train.use_8bit_adam = False
     # learning rate.
-    train.learning_rate = 3e-4
+    train.learning_rate = 1e-4
     # Adam beta1.
     train.adam_beta1 = 0.9
     # Adam beta2.
@@ -77,7 +79,7 @@ def get_config():
     train.max_grad_norm = 1.0
     # number of inner epochs per outer epoch. each inner epoch is one iteration through the data collected during one
     # outer epoch's round of sampling.
-    train.num_inner_epochs = 1
+    train.num_inner_epochs = 4
     # whether or not to use classifier-free guidance during training. if enabled, the same guidance scale used during
     # sampling will be used during training.
     train.cfg = True

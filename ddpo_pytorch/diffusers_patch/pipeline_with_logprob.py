@@ -36,7 +36,8 @@ def pipeline_with_logprob(
     callback_steps: int = 1,
     cross_attention_kwargs: Optional[Dict[str, Any]] = None,
     guidance_rescale: float = 0.0,
-):
+    thold=10,
+    ):
     r"""
     Function invoked when calling the pipeline for generation.
 
@@ -181,8 +182,12 @@ def pipeline_with_logprob(
     num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
     all_latents = [latents]
     all_log_probs = []
+    import time
+    curr_time = time.time()
     with self.progress_bar(total=num_inference_steps) as progress_bar:
         for i, t in enumerate(timesteps):
+            if time.time() - curr_time > thold:
+                break
             # expand the latents if we are doing classifier free guidance
             latent_model_input = (
                 torch.cat([latents] * 2) if do_classifier_free_guidance else latents

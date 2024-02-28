@@ -79,9 +79,9 @@ def main(_):
     )
     if accelerator.is_main_process:
         accelerator.init_trackers(
-            project_name="ddpo-pytorch",
+            project_name=config.project,
             config=config.to_dict(),
-            init_kwargs={"wandb": {"name": config.run_name}},
+            init_kwargs={"wandb": {"name": config.run_name, "entity": config.entity}},
         )
     logger.info(f"\n{config}")
 
@@ -417,8 +417,8 @@ def main(_):
             {
                 "reward": rewards,
                 "epoch": epoch,
-                "reward_mean": rewards.mean(),
-                "reward_std": rewards.std(),
+                "mean_reward": rewards.mean(),
+                "std_reward": rewards.std(),
             },
             step=global_step,
         )
